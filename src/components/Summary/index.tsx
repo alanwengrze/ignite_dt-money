@@ -1,26 +1,39 @@
-import { SummaryContainer } from "./styles"
-import { CardSummary } from "../CardSummary"
+import { SummaryContainer, SummaryCard } from "./styles"
 import { ArrowCircleDown, ArrowCircleUp, CurrencyDollar} from "phosphor-react"
+
+const account = {
+  balance: -10,
+  income: 12000,
+  outcome: 12000
+}
 
 export const Summary = () => {
   return (
     <SummaryContainer>
-      <CardSummary 
-        title="Entradas"
-        icon={<ArrowCircleDown size={32} color="#00b37e"/>}
-        amount="R$ 12.000,00"
-      />
-      <CardSummary 
-        title="Entradas"
-        icon={<ArrowCircleUp size={32} color="#f75a68"/>}
-        amount="R$ 12.000,00"
-      />
-      <CardSummary 
-        title="Entradas"
-        icon={<CurrencyDollar size={32} color="#fff"/>}
-        amount="R$ 12.000,00"
-        
-      />
+      <SummaryCard icon="green">
+        <header>
+          <span>Entradas</span>
+          <ArrowCircleUp size={32}/>
+        </header>
+        <strong>R$ {account.income}</strong>
+      </SummaryCard>
+
+      <SummaryCard icon="red">
+        <header>
+          <span>Saídas</span>
+          <ArrowCircleDown size={32}/>
+        </header>
+        <strong>R$ {account.outcome}</strong>
+      </SummaryCard>
+
+      <SummaryCard className="" icon="white" balance={`${account.balance <= 0 ? 'redDark' : 'greenDark'}`}>
+        <header>
+          <span>Total</span>
+          <CurrencyDollar size={32}/>
+        </header>
+        <strong>R$ {account.balance}</strong>
+      </SummaryCard>
+
     </SummaryContainer>
   )
 }
