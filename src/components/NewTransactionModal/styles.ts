@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import * as Dialog from '@radix-ui/react-dialog';
+import * as RadioGroup from "@radix-ui/react-radio-group";
 
 export const Overlay = styled(Dialog.Overlay)`
   position: fixed; //mesmo que tenha scroll, ficará na mesma posição da tela. Diferente do absolute.
@@ -68,7 +69,7 @@ export const CloseButton = styled(Dialog.Close)`
   color: ${(props) => props.theme["gray-500"]};
 `;
 
-export const TransactionType = styled.div`
+export const TransactionType = styled(RadioGroup.Root)`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
@@ -77,10 +78,10 @@ export const TransactionType = styled.div`
 `;
 
 interface TransactionTypeButtonProps {
-  variant: 'income' | 'outcome';
+  $variant: 'income' | 'outcome';
 }
 
-export const TransactionTypeButton = styled.button<TransactionTypeButtonProps>`
+export const TransactionTypeButton = styled(RadioGroup.Item)<TransactionTypeButtonProps>`
   padding: 1rem;
   display: flex;
   align-items: center;
@@ -88,17 +89,25 @@ export const TransactionTypeButton = styled.button<TransactionTypeButtonProps>`
   gap: 0.5rem;
   border-radius: 6px;
   border: 0;
-  background-color: ${(props) => props.theme["gray-600"]};
+  background-color: ${(props) => props.theme["gray-700"]};
   color: ${(props) => props.theme.white};
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s;
 
   svg {
-    color: ${(props) => props.variant === 'income' ? props.theme["green-300"] : props.theme["red-300"]};
+    color: ${(props) => props.$variant === 'income' ? props.theme["green-300"] : props.theme["red-300"]};
   }
 
-  &:hover {
-    background-color: ${(props) => props.variant === 'income' ? props.theme["green-500"] : props.theme["red-500"]};
+  &[data-state="unchecked"]:hover {
+    background-color: ${(props) => props.theme["gray-600"]};
+  }
+
+  &[data-state="checked"] {
+    background-color: ${(props) => props.$variant === 'income' ? props.theme["green-500"] : props.theme["red-500"]};
+
+    svg {
+      color: ${(props) => props.theme.white};
+    }
   }
 `;

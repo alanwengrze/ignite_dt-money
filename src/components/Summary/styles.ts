@@ -33,8 +33,8 @@ const SUMMARY_COLORS = {
 } as const
 
 interface SummaryIconProps {
-  icon: keyof typeof SUMMARY_COLORS
-  balance?: keyof typeof SUMMARY_COLORS
+  $icon: keyof typeof SUMMARY_COLORS
+  $balance?: keyof typeof SUMMARY_COLORS
 }
 
 export const SummaryCard = styled.div<SummaryIconProps>`
@@ -42,7 +42,7 @@ export const SummaryCard = styled.div<SummaryIconProps>`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  background-color: ${(props) => props.theme[SUMMARY_COLORS[props.balance || "default"]]};
+  background-color: ${(props) => props.theme[SUMMARY_COLORS[props.$balance || "default"]]};
   padding: 1.5rem 2rem;
   border-radius: 6px;
 
@@ -53,7 +53,7 @@ export const SummaryCard = styled.div<SummaryIconProps>`
     color: ${(props) => props.theme["gray-300"]};
 
     > svg {
-      color: ${(props) => props.theme[SUMMARY_COLORS[props.icon]]};
+      color: ${(props) => props.theme[SUMMARY_COLORS[props.$icon]]};
     }
 
   }
