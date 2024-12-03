@@ -1,7 +1,8 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { api } from "../../lib/axios";
 
 interface Transaction {
-  id: number,
+  id: string,
   description: string,
   type: 'income' | 'outcome',
   category: string,
@@ -9,8 +10,17 @@ interface Transaction {
   createdAt: string
 }
 
+interface CreateTransactionInput {
+  description: string,
+  price: number,
+  category: string,
+  type: 'income' | 'outcome'
+}
+
 interface TransactionsContextType {
   transactions: Transaction[];
+  fetchTransactions: (query?: string) => Promise<void>;
+  createTransaction: (transaction: CreateTransactionInput) => Promise<void>
 }
 
 interface TransactionsProviderType {
@@ -23,21 +33,48 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
-  async function loadTransactions(){
-    const response = await fetch("http://localhost:3000/transactions")
-    const data = await response.json()
-    setTransactions(data)
+  async function fetchTransactions(query?: string) {
+    const response = await api.get('/transactions')
+    const data = response.data
+    
+    const filteredTransactions = query
+    ? data.filter((item: Transaction) => item.description.toLowerCase().includes(query.toLowerCase()))
+    : data
+    setTransactions(filteredTransactions)
+  }
+
+  async function createTransaction(transaction: CreateTransactionInput) {
+    const {description, price, category, type} = transaction
+    const response = await api.post('/transactions', {
+      description,
+      price,
+      category,
+      type,
+      createdAt: new Date()
+    })
+
+    setTransactions(state => [...state, response.data])
   }
 
   useEffect(() => {
-    loadTransactions()
+    fetchTransactions()
   }, [])
 
   return (
     <TransactionsContext.Provider 
-      value={{transactions}}
+      value={{
+        transactions,
+        fetchTransactions,
+        createTransaction
+      }}
     >
       {children}
     </TransactionsContext.Provider>
   )
+}
+
+export function useTransactions() {
+  const context = useContext(TransactionsContext)
+
+  return context
 }

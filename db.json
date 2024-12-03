@@ -1,0 +1,52 @@
+{
+  "transactions": [
+    {
+      "id": "1",
+      "description": "Desenvolvimento de site",
+      "type": "income",
+      "category": "Venda",
+      "price": 4500,
+      "createdAt": "2024-11-29T19:41:48.301Z"
+    },
+    {
+      "id": "2",
+      "description": "Hamburger",
+      "type": "outcome",
+      "category": "Alimentação",
+      "price": 50,
+      "createdAt": "2024-11-29T19:35:48.301Z"
+    },
+    {
+      "id": "32ee",
+      "description": "Curso rocketseat",
+      "price": 1700,
+      "category": "Estudo",
+      "type": "income",
+      "createdAt": "2024-12-03T19:49:22.592Z"
+    },
+    {
+      "id": "5f4b",
+      "description": "Compras do mês",
+      "price": 2500,
+      "category": "Mercado",
+      "type": "outcome",
+      "createdAt": "2024-12-03T19:50:59.423Z"
+    },
+    {
+      "id": "de2f",
+      "description": "Roupas para o natal",
+      "price": 500,
+      "category": "Roupa",
+      "type": "outcome",
+      "createdAt": "2024-12-03T19:53:03.920Z"
+    },
+    {
+      "id": "2d9e",
+      "description": "Roupas para o ano novo",
+      "price": 600,
+      "category": "Roupa",
+      "type": "outcome",
+      "createdAt": "2024-12-03T20:46:30.127Z"
+    }
+  ]
+}
