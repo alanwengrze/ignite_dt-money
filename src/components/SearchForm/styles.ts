@@ -40,4 +40,8 @@ export const SearchFormContainer = styled.form`
       color: ${(props) => props.theme["white"]};
     }
   }
+
+  @media (max-width: 568px) {
+    flex-direction: column;
+  }
 `;

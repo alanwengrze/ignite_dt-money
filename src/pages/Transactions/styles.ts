@@ -7,12 +7,16 @@ export const TransactionsContainer = styled.main`
   padding: 0 1.5rem;
 `;
 
+export const TransactionsTableScroll = styled.div`
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+`;
+
 export const TransactionsTable = styled.table`
   width: 100%;
   border-collapse: separate;
   border-spacing: 0 0.5rem;
   margin-top: 1.5rem;
-
   td {
     background-color: ${props => props.theme['gray-700']};
     padding: 1.25rem 2rem;
@@ -27,6 +31,11 @@ export const TransactionsTable = styled.table`
       border-top-right-radius: 6px;
       border-bottom-right-radius: 6px;
     }
+
+  }
+
+  @media (max-width: 768px) {
+    overflow-x: auto;
   }
 `;
 

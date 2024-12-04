@@ -13,6 +13,12 @@ export const HeaderContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 568px) {
+    > img {
+      width: 100px;
+    }
+  }
   
 `;
 
@@ -29,5 +35,9 @@ export const NewTransactionButton = styled.button`
   &:hover {
     background-color: ${(props) => props.theme["green-700"]};
     
+  }
+
+  @media (max-width: 568px) {
+    padding: 8px 16px;
   }
 `;
