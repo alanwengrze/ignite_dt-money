@@ -3,7 +3,7 @@ import { SearchFormContainer } from "./styles"
 import { MagnifyingGlass } from "phosphor-react"
 import * as zod from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useTransactions } from "../contexts/TransactionsContext"
+import { useFetchTransactions } from "../contexts/TransactionsContext"
 
 const searchFormSchema = zod.object({
   query: zod.string()
@@ -11,7 +11,7 @@ const searchFormSchema = zod.object({
 
 type SearchFormInputs = zod.infer<typeof searchFormSchema>
 export const SearchForm = () => {
-  const { fetchTransactions } = useTransactions()
+  const fetchTransactions = useFetchTransactions()
 
   const { 
       register, 

@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {  useEffect, useState, useCallback } from "react";
+import { createContext, useContextSelector } from "use-context-selector";
 import { api } from "../../lib/axios";
 
 interface Transaction {
@@ -33,7 +34,8 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
-  async function fetchTransactions(query?: string) {
+  const fetchTransactions = useCallback(
+    async (query?: string) => {
     const response = await api.get('/transactions')
     const data = response.data
     
@@ -41,9 +43,10 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
     ? data.filter((item: Transaction) => item.description.toLowerCase().includes(query.toLowerCase()))
     : data
     setTransactions(filteredTransactions)
-  }
+  }, [])
 
-  async function createTransaction(transaction: CreateTransactionInput) {
+  const createTransaction = useCallback(
+    async (transaction: CreateTransactionInput) => {
     const {description, price, category, type} = transaction
     const response = await api.post('/transactions', {
       description,
@@ -54,11 +57,11 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
     })
 
     setTransactions(state => [...state, response.data])
-  }
+  }, [])
 
   useEffect(() => {
     fetchTransactions()
-  }, [])
+  }, [fetchTransactions])
 
   return (
     <TransactionsContext.Provider 
@@ -74,7 +77,25 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
 }
 
 export function useTransactions() {
-  const context = useContext(TransactionsContext)
+  const transactions = useContextSelector(TransactionsContext, (context) => {
+    return context.transactions
+  })
 
-  return context
+  return transactions
+}
+
+export function useFetchTransactions() {
+  const fetchTransactions = useContextSelector(TransactionsContext, (context) => {
+    return context.fetchTransactions
+  })
+
+  return fetchTransactions
+}
+
+export function useCreateTransaction() {
+  const createTransaction = useContextSelector(TransactionsContext, (context) => {
+    return context.createTransaction
+  })
+
+  return createTransaction
 }

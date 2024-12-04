@@ -7,7 +7,7 @@ import { PriceHighlight, TransactionsContainer, TransactionsTable, TransactionsT
 
 
 export const Transactions = () => {
-  const {transactions} = useTransactions()
+  const transactions = useTransactions()
   return (
     <div>
       <Header />
