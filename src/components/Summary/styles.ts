@@ -18,7 +18,7 @@ export const SummaryContainer = styled.section`
     background-color: ${(props) => props.theme["red-700"]};
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 820px) {
     grid-template-columns: 1fr;
   }
 `;
