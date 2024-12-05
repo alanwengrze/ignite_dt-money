@@ -1,8 +1,8 @@
 import {  useEffect, useState, useCallback } from "react";
 import { createContext, useContextSelector } from "use-context-selector";
-import { api } from "../../lib/axios";
+import { api } from "../lib/axios";
 
-interface Transaction {
+export interface Transaction {
   id: string,
   description: string,
   type: 'income' | 'outcome',
@@ -22,6 +22,7 @@ interface TransactionsContextType {
   transactions: Transaction[];
   fetchTransactions: (query?: string) => Promise<void>;
   createTransaction: (transaction: CreateTransactionInput) => Promise<void>
+  deleteTransaction: (id: string) => Promise<void>
 }
 
 interface TransactionsProviderType {
@@ -59,6 +60,12 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
     setTransactions(state => [...state, response.data])
   }, [])
 
+  const deleteTransaction = useCallback(
+    async (id: string) => {
+    await api.delete(`/transactions/${id}`)
+    setTransactions(state => state.filter(transaction => transaction.id !== id))
+  }, [])
+
   useEffect(() => {
     fetchTransactions()
   }, [fetchTransactions])
@@ -68,7 +75,8 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
       value={{
         transactions,
         fetchTransactions,
-        createTransaction
+        createTransaction,
+        deleteTransaction,
       }}
     >
       {children}
@@ -98,4 +106,12 @@ export function useCreateTransaction() {
   })
 
   return createTransaction
+}
+
+export function useDeleteTransaction() {
+  const deleteTransaction = useContextSelector(TransactionsContext, (context) => {
+    return context.deleteTransaction
+  })
+
+  return deleteTransaction
 }

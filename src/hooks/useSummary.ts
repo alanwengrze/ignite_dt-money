@@ -1,4 +1,4 @@
-import { useTransactions} from "../components/contexts/TransactionsContext";
+import { useTransactions} from "../contexts/TransactionsContext";
 import { useMemo } from "react";
 
 export function useSummary(){

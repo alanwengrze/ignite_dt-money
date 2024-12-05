@@ -4,16 +4,16 @@ import { X, ArrowCircleDown, ArrowCircleUp } from "phosphor-react";
 import * as zod from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCreateTransaction } from "../contexts/TransactionsContext";
+import { useCreateTransaction } from "../../contexts/TransactionsContext";
 
-const newTransactionFormSchema = zod.object({
+export const newTransactionFormSchema = zod.object({
   description: zod.string(),
   price: zod.number(),
   category: zod.string(),
   type: zod.enum(['income', 'outcome'])
 })
 
-type newTransactionFormInputs = zod.infer<typeof newTransactionFormSchema>
+export type newTransactionFormInputs = zod.infer<typeof newTransactionFormSchema>
 
 export const NewTransactionModal = () => {
 

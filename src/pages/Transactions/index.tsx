@@ -1,13 +1,19 @@
-import { useTransactions } from "../../components/contexts/TransactionsContext";
+import { useDeleteTransaction, useTransactions } from "../../contexts/TransactionsContext";
 import { Header } from "../../components/Header";
 import { SearchForm } from "../../components/SearchForm";
 import { Summary } from "../../components/Summary";
 import { dateFormatter, priceFormatter } from "../../utils/formatter";
 import { PriceHighlight, TransactionsContainer, TransactionsTable, TransactionsTableScroll } from "./styles";
-
+import { ButtonDeleteTransaction } from "../../components/ButtonDeleteTransaction";
 
 export const Transactions = () => {
   const transactions = useTransactions()
+
+  const deleteTransaction = useDeleteTransaction()
+  function handleDeleteTransaction(id: string) {
+    deleteTransaction(id)
+    console.log(id)
+  }
   return (
     <div>
       <Header />
@@ -30,6 +36,10 @@ export const Transactions = () => {
                       </td>
                       <td>{transaction.category}</td>
                       <td>{dateFormatter.format(new Date(transaction.createdAt))}</td>
+                      <td>
+                        <ButtonDeleteTransaction
+                        onDeleteTransaction={() => handleDeleteTransaction(transaction.id)}/>
+                      </td>
                     </tr>
                   )
                 })
