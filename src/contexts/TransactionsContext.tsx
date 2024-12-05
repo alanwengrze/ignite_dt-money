@@ -44,6 +44,8 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
     ? data.filter((item: Transaction) => item.description.toLowerCase().includes(query.toLowerCase()))
     : data
     setTransactions(filteredTransactions)
+
+    localStorage.setItem('@ignite-dt-money:transactions-state-1.0.0', JSON.stringify(data))
   }, [])
 
   const createTransaction = useCallback(
@@ -68,7 +70,13 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
 
   useEffect(() => {
     fetchTransactions()
+
+    const data = localStorage.getItem('@ignite-dt-money:transactions-state-1.0.0')
+    if (data) {
+      setTransactions(JSON.parse(data))
+    }
   }, [fetchTransactions])
+
 
   return (
     <TransactionsContext.Provider 
