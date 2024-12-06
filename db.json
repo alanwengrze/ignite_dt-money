@@ -1,3 +1,44 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "id": "516d",
+      "description": "Curso rocketseat",
+      "price": 1700,
+      "category": "Estudo",
+      "type": "outcome",
+      "createdAt": "2024-12-06T00:49:16.172Z"
+    },
+    {
+      "id": "57c2",
+      "description": "Compras do mês",
+      "price": 3000,
+      "category": "Mercado",
+      "type": "outcome",
+      "createdAt": "2024-12-06T00:49:32.124Z"
+    },
+    {
+      "id": "8e80",
+      "description": "Desenvolvimento de site",
+      "price": 2500,
+      "category": "Venda",
+      "type": "income",
+      "createdAt": "2024-12-06T00:49:56.484Z"
+    },
+    {
+      "id": "cee1",
+      "description": "Salário",
+      "price": 3500,
+      "category": "Trabalho",
+      "type": "income",
+      "createdAt": "2024-12-06T00:50:19.434Z"
+    },
+    {
+      "id": "c2ec",
+      "description": "Internet",
+      "price": 200,
+      "category": "Casa",
+      "type": "outcome",
+      "createdAt": "2024-12-06T00:50:44.547Z"
+    }
+  ]
 }

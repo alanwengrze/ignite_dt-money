@@ -20,9 +20,11 @@ interface CreateTransactionInput {
 
 interface TransactionsContextType {
   transactions: Transaction[];
+  transaction: Transaction;
   fetchTransactions: (query?: string) => Promise<void>;
   createTransaction: (transaction: CreateTransactionInput) => Promise<void>
   deleteTransaction: (id: string) => Promise<void>
+  updateTransaction: (transaction: Transaction) => Promise<void>
 }
 
 interface TransactionsProviderType {
@@ -34,6 +36,7 @@ export const TransactionsContext = createContext({} as TransactionsContextType);
 export const TransactionsProvider = ({children}:TransactionsProviderType) => {
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [transaction, setTransaction] = useState<Transaction>({} as Transaction)
 
   const fetchTransactions = useCallback(
     async (query?: string) => {
@@ -68,10 +71,17 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
     setTransactions(state => state.filter(transaction => transaction.id !== id))
   }, [])
 
+  const updateTransaction = async (transaction: Transaction) => {
+    const response = await api.put(`/transactions/${transaction.id}`, transaction)
+    setTransactions(state => state.map(item => item.id === transaction.id ? response.data : item))
+    setTransaction(response.data)
+  }
+
   useEffect(() => {
     fetchTransactions()
 
     const data = localStorage.getItem('@ignite-dt-money:transactions-state-1.0.0')
+
     if (data) {
       setTransactions(JSON.parse(data))
     }
@@ -85,6 +95,8 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
         fetchTransactions,
         createTransaction,
         deleteTransaction,
+        updateTransaction,
+        transaction
       }}
     >
       {children}
@@ -122,4 +134,20 @@ export function useDeleteTransaction() {
   })
 
   return deleteTransaction
+}
+
+export function useUpdateTransaction() {
+  const updateTransaction = useContextSelector(TransactionsContext, (context) => {
+    return context.updateTransaction
+  })
+
+  return updateTransaction
+}
+
+export function useTransaction() {
+  const transaction = useContextSelector(TransactionsContext, (context) => {
+    return context.transaction
+  })
+
+  return transaction
 }
