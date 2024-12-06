@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { TransactionType, TransactionTypeButton } from "../NewTransactionModal/styles"
 import * as zod from "zod"
 import {useTransaction, useUpdateTransaction } from "../../contexts/TransactionsContext"
+import { useEffect } from "react"
 
 export const editTransactionFormSchema = zod.object({
   description: zod.string(),
@@ -25,7 +26,8 @@ export const ButtonUpdateTransaction = ({ onUpdateTransaction}:ButtonUpdateTrans
   const transaction = useTransaction()
   const {
     control,
-    register, 
+    register,
+    reset,
     handleSubmit,
     formState: {
       isSubmitting
@@ -52,6 +54,14 @@ export const ButtonUpdateTransaction = ({ onUpdateTransaction}:ButtonUpdateTrans
     })
   }
 
+  useEffect(() => {
+    reset({
+      description: transaction.description,
+      price: transaction.price,
+      category: transaction.category,
+      type: transaction.type,
+    });
+  }, [transaction, reset]);
   return (
     <ButtonEditTransactionContainer>
       <Trigger asChild onClick={onUpdateTransaction}><Pencil /></Trigger>
@@ -79,6 +89,7 @@ export const ButtonUpdateTransaction = ({ onUpdateTransaction}:ButtonUpdateTrans
             placeholder="Categoria"
             required
             {...register("category")}
+            readOnly={false}
           />
           <Controller 
             control={control}
