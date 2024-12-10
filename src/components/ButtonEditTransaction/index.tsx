@@ -4,7 +4,7 @@ import { ArrowCircleDown, ArrowCircleUp, Pencil, X } from "phosphor-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TransactionType, TransactionTypeButton } from "../NewTransactionModal/styles"
 import * as zod from "zod"
-import {useTransaction, useUpdateTransaction } from "../../contexts/TransactionsContext"
+import {useUpdateTransaction, useTransaction } from "../../contexts/TransactionsContext"
 import { useEffect } from "react"
 
 export const editTransactionFormSchema = zod.object({
@@ -21,7 +21,6 @@ interface ButtonUpdateTransactionProps {
 }
 
 export const ButtonUpdateTransaction = ({ onUpdateTransaction}:ButtonUpdateTransactionProps) => {
-  
   const updateTransaction = useUpdateTransaction()
   const transaction = useTransaction()
   const {
@@ -35,23 +34,14 @@ export const ButtonUpdateTransaction = ({ onUpdateTransaction}:ButtonUpdateTrans
     } = useForm<editTransactionFormInputs>({
     resolver: zodResolver(editTransactionFormSchema),
     defaultValues: {
-      type: transaction.type,
-      description: transaction.description,
-      category: transaction.category,
-      price: transaction.price
+      type: 'income'
     }
   })
 
-  function handleUpdateTransaction(data: editTransactionFormInputs) {
+  async function handleUpdateTransaction(data: editTransactionFormInputs) {
     const {description, price, category, type} = data
-    updateTransaction({
-      id: transaction.id,
-      description: description,
-      price: price,
-      category: category,
-      type: type,
-      createdAt: transaction.createdAt
-    })
+
+    await updateTransaction({id: transaction.id, description, price, category, type})
   }
 
   useEffect(() => {

@@ -36,7 +36,7 @@ export const NewTransactionModal = () => {
 
   async function handleCreateNewTransaction(data: newTransactionFormInputs) {
     const {description, price, category, type} = data
-    createTransaction({description, price, category, type})
+    await createTransaction({description, price, category, type})
     reset()
   }
   return (

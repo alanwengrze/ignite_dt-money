@@ -1,4 +1,4 @@
-import { useDeleteTransaction, useTransactions, useUpdateTransaction, type Transaction } from "../../contexts/TransactionsContext";
+import { useDeleteTransaction, useTransactions, useTransactionById, useFilteredTransactions, useIsFiltering} from "../../contexts/TransactionsContext";
 import { Header } from "../../components/Header";
 import { SearchForm } from "../../components/SearchForm";
 import { Summary } from "../../components/Summary";
@@ -9,14 +9,18 @@ import { ButtonUpdateTransaction} from "../../components/ButtonEditTransaction";
 
 export const Transactions = () => {
   const transactions = useTransactions()
+  const filteredTransactions = useFilteredTransactions()
+  const isFiltering = useIsFiltering()
   const deleteTransaction = useDeleteTransaction()
-  const updateTransaction = useUpdateTransaction()
-  function handleDeleteTransaction(id: string) {
-    deleteTransaction(id)
+  const transactionById = useTransactionById()
+  async function handleDeleteTransaction(id: number) {
+    console.log(id)
+    await deleteTransaction(id)
   }
-  function handleUpdateTransaction(transaction: Transaction) {
-    updateTransaction(transaction)
+  async function handleUpdateTransaction(transactionId: number) {
+    await transactionById(transactionId)
   }
+  const transactionsToRender = isFiltering ? filteredTransactions : transactions
   return (
     <div>
       <Header />
@@ -27,7 +31,7 @@ export const Transactions = () => {
           <TransactionsTable>
             <tbody>
               {
-                transactions.map(transaction => {
+                transactionsToRender.map(transaction => {
                   return (
                     <tr key={transaction.id}>
                       <td width="40%">{transaction.description}</td>
@@ -38,7 +42,7 @@ export const Transactions = () => {
                         </PriceHighlight>
                       </td>
                       <td>{transaction.category}</td>
-                      <td>{dateFormatter.format(new Date(transaction.createdAt))}</td>
+                      <td>{transaction.createdAt}</td>
                       <td>
                         <ButtonDeleteTransaction
                         onDeleteTransaction={() => handleDeleteTransaction(transaction.id)}/>
@@ -46,8 +50,7 @@ export const Transactions = () => {
                       </td>
                       <td>
                         <ButtonUpdateTransaction 
-                          
-                          onUpdateTransaction={() => handleUpdateTransaction(transaction)}
+                          onUpdateTransaction={() => handleUpdateTransaction(transaction.id)}
                           />
                       </td>
                     </tr>

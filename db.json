@@ -39,6 +39,22 @@
       "category": "Casa",
       "type": "outcome",
       "createdAt": "2024-12-06T00:50:44.547Z"
+    },
+    {
+      "id": "9119",
+      "description": "Roupa de natal",
+      "price": 600,
+      "category": "Roupa",
+      "type": "outcome",
+      "createdAt": "2024-12-07T13:46:24.315Z"
+    },
+    {
+      "id": "db3f",
+      "description": "Roupa de ano novo",
+      "price": 700,
+      "category": "Roupa",
+      "type": "outcome",
+      "createdAt": "2024-12-07T13:46:38.128Z"
     }
   ]
 }
