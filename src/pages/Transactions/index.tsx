@@ -1,20 +1,22 @@
-import { useDeleteTransaction, useTransactions, useTransactionById, useFilteredTransactions, useIsFiltering} from "../../contexts/TransactionsContext";
+import { ButtonFilterWrapper, ButtonWrapperMobile, CategoryAndDateMobile, PriceHighlight, TransactionsContainer, TransactionsMobile, TransactionsTable, TransactionsTableScroll, WrapperMobile } from "./styles";
+import { useDeleteTransaction, useTransactions, useTransactionById, useFilteredTransactions, useIsFiltering, useFilterTransactionsToType} from "../../contexts/TransactionsContext";
+import { CalendarBlank, TagSimple } from "phosphor-react"
 import { Header } from "../../components/Header";
 import { SearchForm } from "../../components/SearchForm";
 import { Summary } from "../../components/Summary";
 import { dateFormatter, priceFormatter } from "../../utils/formatter";
-import { PriceHighlight, TransactionsContainer, TransactionsTable, TransactionsTableScroll } from "./styles";
 import { ButtonDeleteTransaction } from "../../components/ButtonDeleteTransaction";
 import { ButtonUpdateTransaction} from "../../components/ButtonEditTransaction";
+import { ButtonFilter } from "../../components/ButtonFilter";
 
 export const Transactions = () => {
   const transactions = useTransactions()
   const filteredTransactions = useFilteredTransactions()
+  const filterTransactionsToType = useFilterTransactionsToType()
   const isFiltering = useIsFiltering()
   const deleteTransaction = useDeleteTransaction()
   const transactionById = useTransactionById()
   async function handleDeleteTransaction(id: number) {
-    console.log(id)
     await deleteTransaction(id)
   }
   async function handleUpdateTransaction(transactionId: number) {
@@ -27,6 +29,18 @@ export const Transactions = () => {
       <Summary />
       <TransactionsContainer>
         <SearchForm />
+        <ButtonFilterWrapper>
+          <ButtonFilter 
+            onFilter={() => filterTransactionsToType("outcome")}
+            title="saídas"
+            variant="outcome"
+          />
+          <ButtonFilter 
+            onFilter={() => filterTransactionsToType("income")}
+            title="entradas"
+            variant="income" 
+          />
+        </ButtonFilterWrapper>
         <TransactionsTableScroll>
           <TransactionsTable>
             <tbody>
@@ -42,7 +56,7 @@ export const Transactions = () => {
                         </PriceHighlight>
                       </td>
                       <td>{transaction.category}</td>
-                      <td>{transaction.createdAt}</td>
+                      <td>{dateFormatter.format(transaction.createdAt)}</td>
                       <td>
                         <ButtonDeleteTransaction
                         onDeleteTransaction={() => handleDeleteTransaction(transaction.id)}/>
@@ -60,6 +74,38 @@ export const Transactions = () => {
             </tbody>
           </TransactionsTable>
         </TransactionsTableScroll>
+          {
+            transactionsToRender.map(transaction => {
+              return(
+                <TransactionsMobile key={transaction.id}>
+                  <ButtonWrapperMobile>
+                    <ButtonUpdateTransaction 
+                      onUpdateTransaction={() => handleUpdateTransaction(transaction.id)}
+                    />
+                    <ButtonDeleteTransaction
+                      onDeleteTransaction={() => handleDeleteTransaction(transaction.id)}
+                    />
+                  </ButtonWrapperMobile>
+                  <span className="description">{transaction.description}</span>
+                    <PriceHighlight 
+                      $variant= {transaction.type}>
+                      {transaction.type === "outcome"  && "- "}
+                      {priceFormatter.format(transaction.price)}
+                    </PriceHighlight>
+                    <CategoryAndDateMobile>
+                      <WrapperMobile>
+                        <TagSimple />
+                        <p>{transaction.category}</p>
+                      </WrapperMobile>
+                      <WrapperMobile>
+                        <CalendarBlank />
+                        <p>{dateFormatter.format(transaction.createdAt)}</p>
+                      </WrapperMobile>
+                    </CategoryAndDateMobile>
+                </TransactionsMobile>
+              )
+            })
+          }
       </TransactionsContainer>
     </div>
   )

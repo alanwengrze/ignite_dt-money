@@ -67,6 +67,19 @@ export const Content = styled(Dialog.Content)`
   }
 `;
 
+export const Title = styled(Dialog.Title)`
+  color: ${(props) => props.theme["gray-100"]};
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+`
+
+export const Description = styled(Dialog.Description)`
+  color: ${(props) => props.theme["gray-300"]};
+  font-size: 1rem;
+  margin-bottom: 2rem;
+`
+
 export const CloseButton = styled(Dialog.Close)`
   position: absolute;
   background: transparent;

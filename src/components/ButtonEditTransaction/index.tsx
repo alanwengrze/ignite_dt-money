@@ -1,5 +1,5 @@
 import { Controller, useForm } from "react-hook-form"
-import { ButtonEditTransactionContainer, Trigger, Overlay, Portal, Content, Title, CloseButton } from "./styles"
+import { ButtonEditTransactionContainer, Trigger, Overlay, Portal, Content, Title, Description, CloseButton } from "./styles"
 import { ArrowCircleDown, ArrowCircleUp, Pencil, X } from "phosphor-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TransactionType, TransactionTypeButton } from "../NewTransactionModal/styles"
@@ -61,6 +61,7 @@ export const ButtonUpdateTransaction = ({ onUpdateTransaction}:ButtonUpdateTrans
         <Content>
           <CloseButton><X /></CloseButton>
           <Title>Editar transação</Title>
+          <Description>Preencha os campos abaixo para editar a transação</Description>
           <form onSubmit={handleSubmit(handleUpdateTransaction)}>
           <input 
             type="text" 

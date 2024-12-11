@@ -1,12 +1,12 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { Overlay, Content, CloseButton, TransactionType, TransactionTypeButton } from "./styles";
+import { Overlay, Content, Title, Description, CloseButton, TransactionType, TransactionTypeButton } from "./styles";
 import { X, ArrowCircleDown, ArrowCircleUp } from "phosphor-react";
 import * as zod from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateTransaction } from "../../contexts/TransactionsContext";
 
-export const newTransactionFormSchema = zod.object({
+const newTransactionFormSchema = zod.object({
   description: zod.string(),
   price: zod.number(),
   category: zod.string(),
@@ -43,9 +43,12 @@ export const NewTransactionModal = () => {
     <Dialog.Portal>
       <Overlay/>
       <Content>
-        <Dialog.Title>
+        <Title>
           Nova transação
-        </Dialog.Title>
+        </Title>
+        <Description>
+          Crie uma nova transação
+        </Description>
         <CloseButton>
           <X size={24}/>
         </CloseButton>

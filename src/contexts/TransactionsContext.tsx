@@ -1,4 +1,4 @@
-import {  useEffect, useState, useCallback } from "react";
+import {  useEffect, useState, useCallback, useMemo } from "react";
 import { createContext, useContextSelector } from "use-context-selector";
 import { api } from "../lib/axios";
 
@@ -8,7 +8,7 @@ export interface Transaction {
   type: 'income' | 'outcome',
   category: string,
   price: number,
-  createdAt: string,
+  createdAt: Date,
   updatedAt: string
 }
 
@@ -34,6 +34,7 @@ interface TransactionsContextType {
   transaction: Transaction;
   fetchTransactions: () => Promise<void>
   filterTransactions: (query: string) => Promise<void>;
+  filterTransactionsToType: (type: 'income' | 'outcome') => Promise<void>;
   createTransaction: (transaction: CreateTransactionInput) => Promise<void>
   deleteTransaction: (id: number) => Promise<void>
   updateTransaction: (transaction: UpdateTransactionInput) => Promise<void>
@@ -52,9 +53,22 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
   const [isFiltering, setIsFiltering] = useState(false)
 
+  const user_id = useMemo(() => {
+    let existingUserId = localStorage.getItem("@dt-money:user_id");
+    if (!existingUserId) {
+      existingUserId = crypto.randomUUID();
+      localStorage.setItem("@dt-money:user_id", existingUserId);
+    }
+    return existingUserId;
+  }, []);
+
   const fetchTransactions = useCallback(
     async () => {
-    const response = await api.get('/transactions')
+    const response = await api.get('/transactions', {
+      params: {
+        user_id
+      }
+    })
     const data = response.data
     setTransactions(data)
     setFilteredTransactions(data)
@@ -74,60 +88,89 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
     } else {
       setIsFiltering(false);
     }
+    
   }, [transactions]);
 
-  const userId = localStorage.getItem("userId") || generateAndStoreUserId();
-  function generateAndStoreUserId() {
-    const newId = crypto.randomUUID();
-    localStorage.setItem("userId", newId);
-    return newId;
-  }
+  const filterTransactionsToType = useCallback(
+    async (query: string) => {
+    if (query) {
+      const filtered = 
+        transactions.filter((item) =>
+          item.type.toLowerCase().includes(query.toLowerCase())
+        );
+      setFilteredTransactions(filtered);
+      setIsFiltering(true);
+    } else {
+      setIsFiltering(false);
+    }
+    
+  }, [transactions]);
 
   const createTransaction = useCallback(
     async (transaction: CreateTransactionInput) => {
-    const response = await api.post('/transactions', {
-      ...transaction,
-      userId
+    const response = await api.post(`/transactions?user_id=${user_id}`, {
+      ...transaction
     })
-    setTransactions(state => [...state, response.data])
 
-    localStorage.setItem('@ignite-dt-money:transactions-state-1.0.0', JSON.stringify(response.data))
+    setTransactions(state => [...state, response.data])
 
     await fetchTransactions();
   }, [fetchTransactions])
 
   const deleteTransaction = useCallback(
     async (id: number) => {
-    await api.delete(`/transactions/${id}`)
+    await api.delete(`/transactions/${id}`, {
+      params: {
+        user_id
+      }
+    })
 
-    setTransactions(prevTransactions => prevTransactions.filter(transaction => transaction.id !== id));
+    const updatedTransactions = transactions.filter(transaction => transaction.id !== id);
 
-    setFilteredTransactions(prevFiltered => prevFiltered.filter(transaction => transaction.id !== id));
+    setTransactions(updatedTransactions)
+
+    await fetchTransactions()
   }, [])
 
   const getTransactionById = useCallback(
     async (id: number) => {
-    const response = await api.get(`/transactions/${id}`)
+    const response = await api.get(`/transactions/${id}`, {
+      params: {
+        user_id
+      }
+    })
     setTransaction(response.data)
   }, [])
 
   const updateTransaction = useCallback(
     async (transaction:UpdateTransactionInput) => {
-      const response = await api.put(`/transactions/${transaction.id}`, transaction)
+      const response = await api.put(`/transactions/${transaction.id}`,
+      transaction,
+        { params : { user_id } }
+      )
 
       setTransactions(state => state.map(item => item.id === transaction.id ? response.data : item))
-    await fetchTransactions();
-    }, [fetchTransactions]) 
+
+      await fetchTransactions();
+
+    }, []) 
 
   useEffect(() => {
     fetchTransactions()
 
-    const data = localStorage.getItem('@ignite-dt-money:transactions-state-1.0.0')
-    const userId = localStorage.getItem("userId")
-    if (data && userId) {
-      setTransactions(JSON.parse(data))
-    }
   }, [fetchTransactions])
+
+  useEffect(() => {
+    const storageKey = `@dt-money:${user_id}-transactions`;
+    const storedTransactions = localStorage.getItem(storageKey);
+  
+    if (storedTransactions) {
+      setTransactions(JSON.parse(storedTransactions));
+    } else {
+      setTransactions([]); 
+    }
+  }, [user_id]);
+
 
   useEffect(() => {
     if (!isFiltering) {
@@ -144,6 +187,7 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
         filteredTransactions,
         fetchTransactions,
         filterTransactions,
+        filterTransactionsToType,
         isFiltering,
         createTransaction,
         deleteTransaction,
@@ -187,6 +231,14 @@ export function useFilterTransactions() {
   })
 
   return filterTransactions
+}
+
+export function useFilterTransactionsToType() {
+  const filterTransactionsToType = useContextSelector(TransactionsContext, (context) => {
+    return context.filterTransactionsToType
+  })
+
+  return filterTransactionsToType
 }
 
 export function useIsFiltering() {

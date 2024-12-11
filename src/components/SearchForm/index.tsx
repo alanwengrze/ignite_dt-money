@@ -15,6 +15,7 @@ export const SearchForm = () => {
   const { 
       register, 
       handleSubmit,
+      reset,
       formState: {
         isSubmitting
       }
@@ -24,6 +25,7 @@ export const SearchForm = () => {
 
   async function handleSearchTransactions(data: SearchFormInputs) {
     await filterTransactions(data.query)
+    reset()
   }
 
   return (
@@ -33,7 +35,7 @@ export const SearchForm = () => {
         placeholder="Busque por transações"
         {...register("query")}
       />
-      <button type="submit" disabled={isSubmitting}><MagnifyingGlass size={20}/> Buscar</button>
+      <button type="submit" disabled={isSubmitting}><MagnifyingGlass size={20}/> <p>Buscar</p></button>
     </SearchFormContainer>
   )
 }

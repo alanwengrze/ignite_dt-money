@@ -1,5 +1,5 @@
 import { useTransactions, useFilteredTransactions, useIsFiltering } from "../contexts/TransactionsContext";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 export function useSummary(){
   const transactions = useTransactions()
@@ -8,10 +8,6 @@ export function useSummary(){
 
   const summaryTransactionsToRender = isFiltering ? filteredTransactions : transactions
   // {income: 0, outcome: 0, total: 0}
-
-  useEffect(() => {
-    console.log(summaryTransactionsToRender)
-  }, [summaryTransactionsToRender])
   
   const summary = useMemo(()=> {
     return summaryTransactionsToRender.reduce(
