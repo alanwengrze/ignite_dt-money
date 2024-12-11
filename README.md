@@ -2,7 +2,7 @@
 
 ![DT Money img](./public/banner.webp)
 
-DT Money é uma aplicação web que te auxilia no balanço financeiro. [Rocketseat](https://www.rocketseat.com.br/).
+DT Money é uma aplicação web que te auxilia no balanço financeiro. Com o DT Money, você pode criar novas transações, editar, excluir, buscar transações pela descrição, filtrar apenas transações de saídas e também apenas transações de entradas. Esse projeto foi desenvolvido na trilha de React da [Rocketseat](https://www.rocketseat.com.br/).
 
 ## Tópicos
   - [Pré-requisitos](#pré-requisitos)
