@@ -1,4 +1,4 @@
-import {  useEffect, useState, useCallback, useMemo } from "react";
+import {  useEffect, useState, useCallback } from "react";
 import { createContext, useContextSelector } from "use-context-selector";
 import { api } from "../lib/axios";
 
@@ -53,22 +53,10 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
   const [isFiltering, setIsFiltering] = useState(false)
 
-  const user_id = useMemo(() => {
-    let existingUserId = localStorage.getItem("@dt-money:user_id");
-    if (!existingUserId) {
-      existingUserId = crypto.randomUUID();
-      localStorage.setItem("@dt-money:user_id", existingUserId);
-    }
-    return existingUserId;
-  }, []);
 
   const fetchTransactions = useCallback(
     async () => {
-    const response = await api.get('/transactions', {
-      params: {
-        user_id
-      }
-    })
+    const response = await api.get('/transactions')
     const data = response.data
     setTransactions(data)
     setFilteredTransactions(data)
@@ -108,45 +96,31 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
 
   const createTransaction = useCallback(
     async (transaction: CreateTransactionInput) => {
-    const response = await api.post(`/transactions?user_id=${user_id}`, {
+    const response = await api.post(`/transactions`, {
       ...transaction
     })
 
     setTransactions(state => [...state, response.data])
-
-    await fetchTransactions();
-  }, [fetchTransactions])
+  }, [])
 
   const deleteTransaction = useCallback(
     async (id: number) => {
-    await api.delete(`/transactions/${id}`, {
-      params: {
-        user_id
-      }
-    })
+    await api.delete(`/transactions/${id}`)
 
-    const updatedTransactions = transactions.filter(transaction => transaction.id !== id);
+    setTransactions(state => state.filter(item => item.id !== id))
 
-    setTransactions(updatedTransactions)
-
-    await fetchTransactions()
   }, [])
 
   const getTransactionById = useCallback(
     async (id: number) => {
-    const response = await api.get(`/transactions/${id}`, {
-      params: {
-        user_id
-      }
-    })
+    const response = await api.get(`/transactions/${id}`)
     setTransaction(response.data)
   }, [])
 
   const updateTransaction = useCallback(
     async (transaction:UpdateTransactionInput) => {
       const response = await api.put(`/transactions/${transaction.id}`,
-      transaction,
-        { params : { user_id } }
+      transaction
       )
 
       setTransactions(state => state.map(item => item.id === transaction.id ? response.data : item))
@@ -156,20 +130,10 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
     }, []) 
 
   useEffect(() => {
+
     fetchTransactions()
 
   }, [fetchTransactions])
-
-  useEffect(() => {
-    const storageKey = `@dt-money:${user_id}-transactions`;
-    const storedTransactions = localStorage.getItem(storageKey);
-  
-    if (storedTransactions) {
-      setTransactions(JSON.parse(storedTransactions));
-    } else {
-      setTransactions([]); 
-    }
-  }, [user_id]);
 
 
   useEffect(() => {
