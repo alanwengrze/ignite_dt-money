@@ -13,6 +13,7 @@ interface UserData {
 interface AuthContextType {
   data: UserData;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (name: string, email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -48,6 +49,23 @@ export const AuthProvider = ({children}:AuthContextProviderProps) => {
     }
   }
 
+  async function signUp(name: string, email: string, password: string) {
+    try {
+      await api.post('/users', {
+        name,
+        email,
+        password
+      })
+      alert('Usuário criado com sucesso!')
+    }catch (error) {
+      if(error){
+        alert("Não foi possível criar o usuário")
+      }else {
+        alert('Erro no servidor')
+      }
+    }
+  }
+
   async function signOut() {
     localStorage.removeItem('@dt-money:user')
     localStorage.removeItem('@dt-money:token')
@@ -68,6 +86,7 @@ export const AuthProvider = ({children}:AuthContextProviderProps) => {
   return <AuthContext.Provider value={{
     data: data,
     signIn,
+    signUp,
     signOut
   }}>
     {children}

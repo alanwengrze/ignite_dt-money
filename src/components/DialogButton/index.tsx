@@ -1,23 +1,28 @@
-import { X } from "phosphor-react"
 import { ButtonDeleteTransactionContainer, Trigger, Overlay, Portal, Content, Title, CancelButton, ConfirmButton, ButtonWrapper, Description } from "./styles";
 
-interface ButtonDeleteTransactionProps {
-  onDeleteTransaction: () => void
+interface DialogButtonProps {
+  onClick: () => void
+  triggerText: string | React.ReactNode
+  data: {
+    title: string,
+    description: string,
+    confirmText: string
+  }
 }
-export const ButtonDeleteTransaction = ({onDeleteTransaction}: ButtonDeleteTransactionProps) => {
+export const DialogButton = ({onClick, data, triggerText}: DialogButtonProps) => {
   return(
     <ButtonDeleteTransactionContainer>
       <Trigger asChild>
-        <X size={20} weight="bold" />
+        <span>{triggerText}</span>
       </Trigger>
       <Portal>
         <Overlay/>
         <Content>
-          <Title>Quer mesmo excluir esta transação?</Title>
-          <Description> Se você apagar esta transação, não será possível recupera-la.</Description>
+          <Title>{data.title}</Title>
+          <Description>{data.description}</Description>
           <ButtonWrapper>
             <CancelButton>Cancelar</CancelButton>
-            <ConfirmButton onClick={onDeleteTransaction}>Excluir</ConfirmButton>
+            <ConfirmButton onClick={onClick}>{data.confirmText}</ConfirmButton>
           </ButtonWrapper>
         </Content>
       </Portal>

@@ -1,9 +1,11 @@
-import { SignInContainer, ButtonSubmit, FormField, Label, Input, FormContainer  } from "./styles"
+import { SignInContainer, ButtonSubmit, FormField, Label, Input, FormContainer, GoToSignUp, LinkTo, Image, ImageLogo  } from "./styles"
 import * as Form from "@radix-ui/react-form"
 import * as zod from "zod"
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../../contexts/AuthContext"
+import loginImage from "../../assets/finance-login.svg"
+import logo from "../../assets/logo.svg"
 
 const signInFormSchema = zod.object({
   email: zod.string(),
@@ -30,7 +32,9 @@ export const SignIn = () => {
   }
   return(
     <SignInContainer>
+      {/* <Image src={loginImage} alt="" /> */}
       <FormContainer onSubmit={handleSubmit(handleSignIn)}>
+        <ImageLogo src={logo} alt="" />
         <FormField name="email">
           <Label htmlFor="email">
             E-mail
@@ -60,8 +64,12 @@ export const SignIn = () => {
           {/* <Message /> */}
         </FormField>
         <ButtonSubmit type="submit">Entrar</ButtonSubmit>
+        <GoToSignUp>
+          <p>Ainda não possui uma conta?</p>
+          <LinkTo to="/register">Cadastrar</LinkTo>
+        </GoToSignUp>
       </FormContainer>
-      <button>Não tem uma conta?</button>
+      
     </SignInContainer>
   )
 }

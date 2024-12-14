@@ -127,22 +127,18 @@ export const TransactionsProvider = ({children}:TransactionsProviderType) => {
 
       await fetchTransactions();
 
-    }, []) 
+    }, [])
+
 
   useEffect(() => {
-
     fetchTransactions()
-
   }, [fetchTransactions])
-
 
   useEffect(() => {
     if (!isFiltering) {
       setFilteredTransactions(transactions);
     }
   }, [transactions, isFiltering]);
-
-
 
   return (
     <TransactionsContext.Provider 

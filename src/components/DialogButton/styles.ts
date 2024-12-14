@@ -7,7 +7,7 @@ export const ButtonDeleteTransactionContainer = styled(AlertDialog.Root)`
 export const Trigger = styled(AlertDialog.Trigger)`
 
   cursor: pointer;
-  color: ${(props) => props.theme["red-500"]};
+  color: ${(props) => props.theme["red-300"]};
 `
 
 

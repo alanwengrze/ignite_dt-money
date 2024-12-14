@@ -1,11 +1,11 @@
 import { ButtonFilterWrapper, ButtonWrapperMobile, CategoryAndDateMobile, PriceHighlight, TransactionsContainer, TransactionsMobile, TransactionsTable, TransactionsTableScroll, WrapperMobile } from "./styles";
 import { useDeleteTransaction, useTransactions, useTransactionById, useFilteredTransactions, useIsFiltering, useFilterTransactionsToType} from "../../contexts/TransactionsContext";
-import { CalendarBlank, TagSimple } from "phosphor-react"
+import { CalendarBlank, TagSimple, X } from "phosphor-react"
 import { Header } from "../../components/Header";
 import { SearchForm } from "../../components/SearchForm";
 import { Summary } from "../../components/Summary";
 import { dateFormatter, priceFormatter } from "../../utils/formatter";
-import { ButtonDeleteTransaction } from "../../components/ButtonDeleteTransaction";
+import { DialogButton } from "../../components/DialogButton";
 import { ButtonUpdateTransaction} from "../../components/ButtonEditTransaction";
 import { ButtonFilter } from "../../components/ButtonFilter";
 
@@ -58,8 +58,15 @@ export const Transactions = () => {
                       <td>{transaction.category}</td>
                       <td>{dateFormatter.format(transaction.createdAt)}</td>
                       <td>
-                        <ButtonDeleteTransaction
-                        onDeleteTransaction={() => handleDeleteTransaction(transaction.id)}/>
+                        <DialogButton
+                        triggerText={<X size={20} weight="bold"/>}
+                        data={{
+                          title: "Excluir transação",
+                          description: "Tem certeza que deseja excluir essa transação?",
+                          confirmText: "Excluir"
+                        }}
+                        onClick={() => handleDeleteTransaction(transaction.id)}
+                        />
                         
                       </td>
                       <td>
@@ -82,8 +89,14 @@ export const Transactions = () => {
                     <ButtonUpdateTransaction 
                       onUpdateTransaction={() => handleUpdateTransaction(transaction.id)}
                     />
-                    <ButtonDeleteTransaction
-                      onDeleteTransaction={() => handleDeleteTransaction(transaction.id)}
+                   <DialogButton
+                      triggerText={<X size={20} weight="bold"/>}
+                      data={{
+                        title: "Excluir transação",
+                        description: "Tem certeza que deseja excluir essa transação?",
+                        confirmText: "Excluir"
+                      }}
+                      onClick={() => handleDeleteTransaction(transaction.id)}
                     />
                   </ButtonWrapperMobile>
                   <span className="description">{transaction.description}</span>
