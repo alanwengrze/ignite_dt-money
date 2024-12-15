@@ -10,6 +10,12 @@ export const Trigger = styled(AlertDialog.Trigger)`
   color: ${(props) => props.theme["red-300"]};
 `
 
+export const TriggerItems = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`
+
 
 export const Portal = styled(AlertDialog.Portal)`
 
@@ -67,6 +73,8 @@ export const CancelButton = styled(AlertDialog.Cancel)`
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
+
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
   
 
   &:hover {
@@ -86,7 +94,10 @@ export const ConfirmButton = styled(AlertDialog.Action)`
   font-weight: bold;
   cursor: pointer;
 
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+
   &:hover {
     background-color: ${(props) => props.theme["red-700"]};
+    box-shadow: 0 0 0 1px ${(props) => props.theme["red-500"]};
   }
 `

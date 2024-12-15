@@ -1,4 +1,4 @@
-import { DropdownMenuContainer, Trigger, TriggerItems, Portal, Content} from "./styles";
+import { DropdownMenuContainer, Trigger, Portal, Content, Wrapper} from "./styles";
 import {CaretDown} from "phosphor-react"
 
 interface DropDownMenuProps {
@@ -9,12 +9,12 @@ interface DropDownMenuProps {
 export const DropDownMenu = ({children, triggerText}: DropDownMenuProps) => {
   return (
     <DropdownMenuContainer modal={false}>
-      <Trigger asChild>
-        <TriggerItems>
-          <span>Seja bem vindo(a),<h3>{triggerText}</h3></span> 
+      <Wrapper>
+      <span>Seja bem vindo(a),<h3>{triggerText}</h3></span> 
+        <Trigger asChild>
           <CaretDown size={20} weight="bold" />
-        </TriggerItems>
-      </Trigger>
+        </Trigger>
+      </Wrapper>
       <Portal>
         <Content>
           {children}   

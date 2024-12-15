@@ -1,10 +1,11 @@
-import { HeaderContainer, HeaderContent, NewTransactionButton, Wrapper } from "./styles";
+import { DropdownMenuItem, HeaderContainer, HeaderContent, NewTransactionButton, Wrapper } from "./styles";
 import * as Dialog from '@radix-ui/react-dialog'
 import logo from '../../assets/logo.svg'
 import { NewTransactionModal } from "../NewTransactionModal";
 import { useAuth } from "../../contexts/AuthContext";
 import { DialogButton } from "../DialogButton";
 import { DropDownMenu } from "../DropDownMenu";
+import {SignOut, User} from "phosphor-react"
 export const Header = () => {
   const { signOut, data } = useAuth();
   const { user } = data;
@@ -26,16 +27,23 @@ export const Header = () => {
         <DropDownMenu
           triggerText={user.name}
         >
-          <span>Editar perfil</span>
-          <DialogButton
-            onClick={handleLogout}
-            data={{
-              title: 'Deseja realmente sair?',
-              description: 'Você sera deslogado do sistema',
-              confirmText: 'Sair'
-            }}
-            triggerText="Sair"
-          />
+          <DropdownMenuItem>
+            <User />
+            <span>Editar perfil</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <SignOut />
+            <DialogButton
+              onClick={handleLogout}
+              data={{
+                title: 'Deseja realmente sair?',
+                description: 'Você será deslogado do sistema',
+                confirmText: 'Sair'
+              }}
+              triggerText="Sair"
+            />
+          </DropdownMenuItem>
+          
           
         </DropDownMenu>
       </HeaderContent>

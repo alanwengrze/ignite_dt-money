@@ -1,4 +1,4 @@
-import { DialogButtonContainer, Trigger, Overlay, Portal, Content, Title, CancelButton, ConfirmButton, ButtonWrapper, Description } from "./styles";
+import { DialogButtonContainer, Trigger, Overlay, Portal, Content, Title, CancelButton, ConfirmButton, ButtonWrapper, Description, TriggerItems } from "./styles";
 interface DialogButtonProps {
   onClick: () => void
   triggerText: string | React.ReactNode
@@ -12,7 +12,7 @@ export const DialogButton = ({onClick, data, triggerText}: DialogButtonProps) =>
   return(
     <DialogButtonContainer>
       <Trigger asChild>
-        <span>{triggerText}</span>
+        <TriggerItems>{triggerText}</TriggerItems>
       </Trigger>
       <Portal>
         <Overlay/>

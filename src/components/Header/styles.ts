@@ -29,6 +29,18 @@ export const Wrapper = styled.div`
   gap: 0.75rem;
 `;
 
+export const DropdownMenuItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  color: ${(props) => props.theme["green-300"]};
+
+  &:last-child{
+    color: ${(props) => props.theme["red-300"]};
+  }
+`
+
 export const NewTransactionButton = styled.button`
   background-color: ${(props) => props.theme["green-500"]};
   color: ${(props) => props.theme["white"]};
