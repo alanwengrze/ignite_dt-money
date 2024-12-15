@@ -1,5 +1,4 @@
-import { ButtonDeleteTransactionContainer, Trigger, Overlay, Portal, Content, Title, CancelButton, ConfirmButton, ButtonWrapper, Description } from "./styles";
-
+import { DialogButtonContainer, Trigger, Overlay, Portal, Content, Title, CancelButton, ConfirmButton, ButtonWrapper, Description } from "./styles";
 interface DialogButtonProps {
   onClick: () => void
   triggerText: string | React.ReactNode
@@ -11,7 +10,7 @@ interface DialogButtonProps {
 }
 export const DialogButton = ({onClick, data, triggerText}: DialogButtonProps) => {
   return(
-    <ButtonDeleteTransactionContainer>
+    <DialogButtonContainer>
       <Trigger asChild>
         <span>{triggerText}</span>
       </Trigger>
@@ -26,6 +25,6 @@ export const DialogButton = ({onClick, data, triggerText}: DialogButtonProps) =>
           </ButtonWrapper>
         </Content>
       </Portal>
-    </ButtonDeleteTransactionContainer>
+    </DialogButtonContainer>
   )
 }

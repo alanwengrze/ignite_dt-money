@@ -22,6 +22,13 @@ export const HeaderContent = styled.div`
   
 `;
 
+export const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.75rem;
+`;
+
 export const NewTransactionButton = styled.button`
   background-color: ${(props) => props.theme["green-500"]};
   color: ${(props) => props.theme["white"]};

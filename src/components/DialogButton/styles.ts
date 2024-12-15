@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 
-export const ButtonDeleteTransactionContainer = styled(AlertDialog.Root)`
-
+export const DialogButtonContainer = styled(AlertDialog.Root)`
+  
 `
 export const Trigger = styled(AlertDialog.Trigger)`
 
